@@ -1,0 +1,117 @@
+body {
+    background-image: url("../images/back.jpg");
+    background-size: cover;
+    font-family: sans-serif;
+    margin: 0;
+    opacity: 1;
+    color: #fff;
+}
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.781); /* Black with 50% opacity */
+    z-index: -1; 
+
+}
+.container {
+    max-width: 1200px;
+    height: 30px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+img{
+    width: 50px;
+    height: auto;
+}
+header {
+    background-color: #333;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 3em;
+    margin: 0;
+    color: rgb(192, 73, 37);
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    margin-left: 550px;
+}
+
+nav li {
+    margin-left: 40px;
+    font-size: 1.5em;
+    font-family: serif;
+
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: orangered;
+    background: local;
+}
+
+.hero {
+    
+    background-position: center;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 4em;
+    margin-bottom: 10px;
+    margin-top: -90px;
+
+}
+.container img{
+    width: 300px;
+    margin-top: -90px;
+    height: auto;
+}
+.hero button {
+    background-color: #032568;
+    color: #222;
+    width: 300px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.hero button a{
+    text-decoration: none;
+    color: white;
+    font-size: 2em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.hero button:hover {
+    background-color: #ddd;
+}
+
+
+footer {
+    margin-top: 350px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+}
+
