@@ -1,6 +1,6 @@
 body {
     font-family: sans-serif;
-    background-image: url("../images/back1.jpg");
+    background-color:#e0e2f1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,27 +15,36 @@ body {
 }
 
 .left {
-    width: 50%;
-    padding: 15px;
+    width: 700px;
+    padding: 13px;
+    margin-left: 150px;
 }
 
 .left h1 {
     font-size: 4em;
-    color: #4285f4;
+    color: #000000;
     margin-bottom: 5px;
-    margin-left: 135px;
-    margin-top: -5px;
+    font-style: italic;
+    
+}
+.left h2 {
+    font-size: 3em; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #4285f4;
+    margin-top: -30px;
+    margin-bottom: 10px;
 }
 img{
     width: 205px;
     height: auto;
-    margin-left: 130px;
+    margin-top:-750px;
+    margin-left:-150px;
 }
 
-.left h2 {
+.left h3 {
     font-size: 1.5em;
     color: #4285f4;
-    margin-top: -55px;
+   margin-top:70px;
     margin-bottom: 10px;
 }
 
@@ -48,7 +57,7 @@ img{
     width: 550px;
     padding: 20px;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 3px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -72,7 +81,7 @@ img{
 }
 
 button {
-    background-color: #4285f4;
+    background-color: rgb(192, 73, 37);
     color: #fff;
     padding: 12px 20px;
     border: none;
@@ -82,7 +91,7 @@ button {
 }
 
 button:hover {
-    background-color: #3367d6;
+    background-color: rgb(146, 137, 135);
 }
 
 a {

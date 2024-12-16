@@ -3,7 +3,7 @@
 <head>
     <title>Registration Form</title>
     <link rel="stylesheet" href="../css/Studsignup.css">
-    <link rel="icon" href="../images/logo.png" type="image/png">
+    <link rel="icon" href="../images/logo1.png" type="image/png">
 
 </head>
 <body>

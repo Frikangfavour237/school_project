@@ -18,7 +18,7 @@
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="About.php">About</a></li>
-                    <li><a href="../signup&signin/choice.php">Signup</a></li>
+                    <li><a href="../signup&signin/choice.php">Signin</a></li>
                 </ul>
             </nav>
         </div>
@@ -36,7 +36,7 @@
     </section>
     <footer>
         <div class="container">
-            <p>&copy; 2024 aFEED. All rights reserved.</p>
+            <p>&copy; 2024 aFEED</p>
         </div>
     </footer>
 </body>

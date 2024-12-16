@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration Form</title>
+    <title>aFEED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/Studsignup.css">
-    <link rel="icon" href="../images/logo.png" type="image/png">
+    <link rel="icon" href="../images/logo1.png" type="image/png">
 </head>
 <body>
     <div class="container">

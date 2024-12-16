@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>aFEED</title>
     <link rel="stylesheet" href="../css/Studsignin.css">
-    <link rel="icon" href="../images/logo.png" type="image/png">
+    <link rel="icon" href="../images/logo1.png" type="image/png">
 
 </head>
 <body>
+<img src="../images/logo.png" alt="aFeed logo">
 
 <div class="container">
         <div class="left">
-            <h1>aFeed </h1>
-            <img src="../images/logo.png" alt="aFeed logo">
-            <h2>Attendance and Feedback System</h2>
+            <h1>aFeed </h1><br>
+            <h2 id="one">Login </h2>
+            <h3>Attendance and Feedback System</h3>
             <p>Sign into your account using your valid  email address and correct password!</p>
         </div>
         <div class="right">
@@ -29,8 +30,6 @@
                 </div>
                 <button type="submit">Sign in</button>
                 <p><a href="#">Forgot password?</a></p>
-                <p>Don't have an account?
-                    <a href="Studsignup.php" class="register-link"> Register</a></p>
             </form>
         </div>
     </div>

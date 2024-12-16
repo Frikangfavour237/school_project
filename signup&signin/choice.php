@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <title>aFEED</title>
     <link rel="stylesheet" href="../css/choice.css">
-    <link rel="icon" href="../images/logo.png" type="image/png">
+    <link rel="icon" href="../images/logo1.png" type="image/png">
 
 </head>
 <body>
@@ -15,7 +15,7 @@
             <a href="../home/index.php">Homepage</a>
         </h1>
         <div class="logo">
-            <img src="../images/logo.png" alt="Eschosys">
+            <img src="../images/logo.png" alt="logo">
         </div>
         <h1>Join as a Student or an Admin</h1>
 
