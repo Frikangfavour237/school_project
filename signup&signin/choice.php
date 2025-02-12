@@ -60,10 +60,9 @@ freelancerOption.addEventListener('click', () => {
 applyButton.addEventListener('click', () => {
     // Redirect to the appropriate signup page based on the selected role
     if (freelancerOption.classList.contains('active')) {
-        // Replace 'freelancer-signup.html' with your actual freelancer signup page URL
         window.location.href = 'Signin.php';
     } else {
-        // Replace 'client-signup.html' with your actual client signup page URL
+
         window.location.href = 'Studsignup.php';
     }
 });

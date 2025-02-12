@@ -11256,7 +11256,12 @@ body {
   border-radius: 0.375rem !important;
 }
 
-.sb-sidenav-menu .nav-link:hover{
-  background-color: #31364d;
+.sb-sidenav-menu .nav-link:hover {
+  background-color: #9e5510;
+  color: #fff !important;
   border-radius: 10px;
+}
+
+.sb-sidenav-menu .nav-link:hover svg {
+  fill: #fff !important;
 }
