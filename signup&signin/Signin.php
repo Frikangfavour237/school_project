@@ -16,13 +16,13 @@
             <h1>aFeed </h1><br>
             <h2 id="one">Login </h2>
             <h3>Attendance and Feedback System</h3>
-            <p>Sign into your account using your valid  email address and correct password!</p>
+            <p>Sign into your account using your username and  password!</p>
         </div>
         <div class="right">
-        <form action="../authorisation/authenticate.php" method="POST">
+        <form action="../authorisation/signinval.php" method="POST">
                 <div class="form-group">
-                    <label for="matrix-number">Email</label>
-                    <input type="text" id="email" name="email" placeholder="Enter your email address">
+                    <label for="matrix-number">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>

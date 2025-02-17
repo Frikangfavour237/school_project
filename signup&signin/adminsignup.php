@@ -11,7 +11,7 @@
     <p>
         </p>
         <h2>Admin signup form</h2>
-        <form id="myForm" action="../authorisation/createadmin.php" method="POST">
+        <form id="myForm" action="../authorisation/teachersignupval.php" method="POST">
             <div class="form-group">
                 <input type="text" id="firstname" placeholder="Enter First Name" name="firstname" required>
             </div>
@@ -19,7 +19,7 @@
                 <input type="text" id="lastname" placeholder="Enter Last Name" name="lastname" required>
             </div>
             <div class="form-group">
-                <input type="text" id="gender" placeholder="Gender" name="gender" required>
+                <input type="text" id="subject" placeholder="Enter course taught" name="subject" required>
             </div>
             <div class="form-group">
                 <input type="email" id="email" placeholder="Enter Email Address" name="email" required>
