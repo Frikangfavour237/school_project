@@ -1,125 +1,15 @@
 <?php require('./templates/header.php') ?>
 
 <?php require('./templates/navbar.php') ?>
-
-<div id="layoutSidenav">
-
-    <?php require('./templates/sidebar.php') ?>
-
-    <div id="layoutSidenav_content" class="bg-light">
-        <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">Feedback Analysis</h1>
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active" style="color:#9e5510;">Feedback Analysis</li>
-                </ol>
-
-                <!-- Add Feedback Form -->
-                <div class="card bg-white shadow mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Add Feedback</h5>
-                        <form id="addFeedbackForm" action="add_feedback.php" method="POST">
-                            
-                            <div class="form-group">
-                                <label for="comment">Comment</label>
-                                <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-yellow">Submit Feedback</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Feedback Box -->
-                <div class="card bg-white shadow mb-4">
-                    <div class="card-body">
-                        <div class="feedback-box">
-                            <!-- Example feedback 1 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> John Doe is a great teacher who explains concepts clearly.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">10</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 2 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Sometimes the pace is too fast.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">5</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">3</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 3 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Jane Smith makes the subject very interesting.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">8</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 4 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Needs to provide more examples.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">4</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 5 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Mark Johnson is very knowledgeable and helpful.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">12</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">0</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 6 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Sometimes the lectures are too long.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" onclick="likeFeedback(this)">
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">6</span>
-                                    </button>
-                                    <button class="btn-icon" onclick="dislikeFeedback(this)">
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Add more feedback as needed -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        <?php require('./templates/footer.php') ?>
-    </div>
-</div>
-
-<?php require('./templates/footer.php') ?>
-
 <style>
+    .bg-custom {
+        background-color:rgb(235, 239, 245);
+    }
     .feedback {
         margin-bottom: 1rem;
+        background-color:rgb(225, 216, 216); /* Set the background color */
+        padding: 1rem;
+        border-radius: 5px;
     }
     .feedback-actions {
         display: flex;
@@ -149,33 +39,121 @@
     }
 </style>
 
+<div id="layoutSidenav">
+
+    <?php require('./templates/sidebar.php') ?>
+
+    <div id="layoutSidenav_content" class="bg-custom">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Feedback Analysis</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active" style="color:#9e5510;">Feedback Analysis</li>
+                </ol>
+
+                <!-- Add Feedback Form -->
+                <div class="card bg-white shadow mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Feedback</h5>
+                        <form id="addFeedbackForm" action="add_feedback.php" method="POST">
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-yellow">Submit Feedback</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Feedback Box -->
+                <div class="card bg-white shadow mb-4">
+                    <div class="card-body">
+                        <div class="feedback-box">
+                            <?php
+                            require('../config/db.php'); // Include your database connection file
+
+                            // Fetch feedback from the database
+                            $result = $conn->query("SELECT * FROM feedback ORDER BY created_at DESC");
+
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<div class="feedback" data-feedback-id="' . $row['id'] . '">';
+                                echo '<p><strong>Student Feedback:</strong> ' . htmlspecialchars($row['comment']) . '</p>';
+                                echo '<div class="feedback-actions">';
+                                echo '<button class="btn-icon" onclick="likeFeedback(this)">';
+                                echo '<i class="fas fa-thumbs-up"></i> <span class="like-count">' . $row['likes'] . '</span>';
+                                echo '</button>';
+                                echo '<button class="btn-icon" onclick="dislikeFeedback(this)">';
+                                echo '<i class="fas fa-thumbs-down"></i> <span class="dislike-count">' . $row['dislikes'] . '</span>';
+                                echo '</button>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+
+                            $conn->close();
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
 <script>
     function likeFeedback(button) {
-        const feedbackActions = button.parentElement;
-        const dislikeButton = feedbackActions.querySelector('.fa-thumbs-down').parentElement;
-        if (dislikeButton.disabled) return;
-
+        const feedbackElement = button.closest('.feedback');
+        const feedbackId = feedbackElement.getAttribute('data-feedback-id');
         const likeCountSpan = button.querySelector('.like-count');
-        let likeCount = parseInt(likeCountSpan.textContent);
-        likeCount++;
-        likeCountSpan.textContent = likeCount;
 
-        button.disabled = true;
-        dislikeButton.disabled = true;
+        fetch('like_feedback.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'feedback_id=' + feedbackId,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'success') {
+                let likeCount = parseInt(likeCountSpan.textContent);
+                likeCount++;
+                likeCountSpan.textContent = likeCount;
+                button.disabled = true;
+                button.nextElementSibling.disabled = true;
+            } else if (data === 'already_voted') {
+                alert('You have already voted on this feedback.');
+            } else {
+                console.error('Error liking feedback');
+            }
+        });
     }
 
     function dislikeFeedback(button) {
-        const feedbackActions = button.parentElement;
-        const likeButton = feedbackActions.querySelector('.fa-thumbs-up').parentElement;
-        if (likeButton.disabled) return;
-
+        const feedbackElement = button.closest('.feedback');
+        const feedbackId = feedbackElement.getAttribute('data-feedback-id');
         const dislikeCountSpan = button.querySelector('.dislike-count');
-        let dislikeCount = parseInt(dislikeCountSpan.textContent);
-        dislikeCount++;
-        dislikeCountSpan.textContent = dislikeCount;
 
-        button.disabled = true;
-        likeButton.disabled = true;
+        fetch('dislike_feedback.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'feedback_id=' + feedbackId,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'success') {
+                let dislikeCount = parseInt(dislikeCountSpan.textContent);
+                dislikeCount++;
+                dislikeCountSpan.textContent = dislikeCount;
+                button.disabled = true;
+                button.previousElementSibling.disabled = true;
+            } else if (data === 'already_voted') {
+                alert('You have already voted on this feedback.');
+            } else {
+                console.error('Error disliking feedback');
+            }
+        });
     }
 </script>
 

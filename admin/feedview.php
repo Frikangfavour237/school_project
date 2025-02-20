@@ -18,79 +18,28 @@
                 <div class="card bg-white shadow mb-4">
                     <div class="card-body">
                         <div class="feedback-box">
-                            <!-- Example feedback 1 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> John Doe is a great teacher who explains concepts clearly.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">10</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 2 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Sometimes the pace is too fast.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">5</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">3</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 3 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Jane Smith makes the subject very interesting.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">8</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 4 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Needs to provide more examples.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">4</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 5 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Mark Johnson is very knowledgeable and helpful.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">12</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">0</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Example feedback 6 -->
-                            <div class="feedback">
-                                <p><strong>Student Feedback:</strong> Sometimes the lectures are too long.</p>
-                                <div class="feedback-actions">
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">6</span>
-                                    </button>
-                                    <button class="btn-icon" disabled>
-                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Add more feedback as needed -->
+                            <?php
+                            require('../config/db.php'); // Include your database connection file
+
+                            // Fetch feedback from the database
+                            $result = $conn->query("SELECT * FROM feedback ORDER BY created_at DESC");
+
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<div class="feedback" data-feedback-id="' . $row['id'] . '">';
+                                echo '<p><strong>Student Feedback:</strong> ' . htmlspecialchars($row['comment']) . '</p>';
+                                echo '<div class="feedback-actions">';
+                                echo '<button class="btn-icon" disabled>';
+                                echo '<i class="fas fa-thumbs-up"></i> <span class="like-count">' . $row['likes'] . '</span>';
+                                echo '</button>';
+                                echo '<button class="btn-icon" disabled>';
+                                echo '<i class="fas fa-thumbs-down"></i> <span class="dislike-count">' . $row['dislikes'] . '</span>';
+                                echo '</button>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+
+                            $conn->close();
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -105,6 +54,9 @@
 <style>
     .feedback {
         margin-bottom: 1rem;
+        background-color:rgb(225, 216, 216); /* Set the background color */
+        padding: 1rem;
+        border-radius: 5px;
     }
     .feedback-actions {
         display: flex;
