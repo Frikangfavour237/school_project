@@ -10,17 +10,12 @@
     <div class="container">
     <p>
         </p>
-        <h2>Teacher signup form</h2>
-        <form id="myForm" action="../authorisation/teachersignupval.php" method="POST">
+        <h2>Administrator signup form</h2>
+        <form id="myForm" action="../authorisation/adminsignupval.php" method="POST">
             <div class="form-group">
-                <input type="text" id="firstname" placeholder="Enter First Name" name="firstname" required>
+                <input type="text" id="fullname" placeholder="Enter Full Name" name="fullname" required>
             </div>
-            <div class="form-group">
-                <input type="text" id="lastname" placeholder="Enter Last Name" name="lastname" required>
-            </div>
-            <div class="form-group">
-                <input type="text" id="subject" placeholder="Enter course taught" name="subject" required>
-            </div>
+           
             <div class="form-group">
                 <input type="email" id="email" placeholder="Enter Email Address" name="email" required>
             </div><br>

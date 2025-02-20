@@ -1,199 +1,139 @@
 <?php require('./templates/header.php') ?>
 
 <?php require('./templates/navbar.php') ?>
+<style>
+         .bg-custom {
+        background-color:rgb(235, 239, 245);
+    }
+    </style>
 
 <div id="layoutSidenav">
 
     <?php require('./templates/sidebar.php') ?>
+   
 
-    <div id="layoutSidenav_content" class="bg-light">
+    <div id="layoutSidenav_content" class="bg-custom">
         <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">Feedback View</h1>      
-                <style>
-/* CSS Styles */
+            <div class="container-fluid px-4 ">
+                <h1 class="mt-4">Feedback Analysis</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active" style="color:#9e5510;">Feedback Analysis</li>
+                </ol>
 
-/* Basic dropdown container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-/* Dropdown button (trigger) */
-.dropdown-button {
-  background-color:rgb(232, 208, 156); 
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-/* Dropdown content (hidden by default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 450px; /* Adjust as needed */
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-/* Show the dropdown content when the button is hovered over/focused */
-.dropdown:hover .dropdown-content, .dropdown:focus-within .dropdown-content {
-  display: block;
-}
-
-/* Task box style */
-.task-box {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 8px;
-  margin-bottom: 5px;
-  border-radius: 3px;
-  word-wrap: break-word; /* Prevent long words from overflowing */
-}
-
-/* Add Task Form in Dropdown */
-.add-task-form {
-  margin-top: 10px;
-}
-
-.add-task-form input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box; /* Important: includes padding and border in the element's total width and height */
-}
-
-.add-task-form button {
-  background-color:rgb(244, 189, 137); /* Blue */
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.add-task-form button:hover {
-  background-color: rgb(244, 189, 137);
-}
-
-/* Optional: Style for error messages */
-.error-message {
-  color: red;
-  font-size: 0.9em;
-  margin-top: 5px;
-}
-
-</style>
-</head>
-<body>
-
-<div class="dropdown">
-    <div class=" card shadow bg-white mb-5 " style="width:450px; height= 50px">
-        <h3 style="text-align:center;">
-            NAME
-        </h3>
-        <span style="text-align:center;"> course taught</span>
-            <button class="dropdown-button">Feeds</button>
-            <div class="dropdown-content">
-                <!-- Task List -->
-                <div id="task-list">
-                <!-- Tasks will be added here dynamically -->
-                </div>
-
-                <!-- Add Task Form -->
-                <div class="add-task-form">
-                <input type="text" id="new-task-text" placeholder="Enter new task">
-                <button onclick="addTask()">Add Task</button>
-                <div id="error-message" class="error-message"></div>
+                <!-- Feedback Box -->
+                <div class="card bg-white shadow mb-4">
+                    <div class="card-body">
+                        <div class="feedback-box">
+                            <!-- Example feedback 1 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> John Doe is a great teacher who explains concepts clearly.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">10</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Example feedback 2 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> Sometimes the pace is too fast.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">5</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">3</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Example feedback 3 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> Jane Smith makes the subject very interesting.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">8</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Example feedback 4 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> Needs to provide more examples.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">4</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">2</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Example feedback 5 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> Mark Johnson is very knowledgeable and helpful.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">12</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">0</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Example feedback 6 -->
+                            <div class="feedback">
+                                <p><strong>Student Feedback:</strong> Sometimes the lectures are too long.</p>
+                                <div class="feedback-actions">
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-up"></i> <span class="like-count">6</span>
+                                    </button>
+                                    <button class="btn-icon" disabled>
+                                        <i class="fas fa-thumbs-down"></i> <span class="dislike-count">1</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Add more feedback as needed -->
+                        </div>
+                    </div>
                 </div>
             </div>
-    </div>
-
-</div>
-<div class="dropdown">
-    <div class=" card shadow bg-white mb-5 " style="width:450px; height= 50px">
-        <h3 style="text-align:center;">
-            NAME
-        </h3>
-        <span style="text-align:center;"> course taught</span>
-            <button class="dropdown-button">Feeds</button>
-            <div class="dropdown-content">
-                <!-- Task List -->
-                <div id="task-list">
-                <!-- Tasks will be added here dynamically -->
-                </div>
-
-                <!-- Add Task Form -->
-                <div class="add-task-form">
-                <input type="text" id="new-task-text" placeholder="Enter new task">
-                <button onclick="addTask()">Add Task</button>
-                <div id="error-message" class="error-message"></div>
-                </div>
-            </div>
-    </div>
-    
-
-</div>
-
-
-<script>
-// JavaScript Functionality
-function addTask() {
-  const taskText = document.getElementById("new-task-text").value.trim();
-  const taskList = document.getElementById("task-list");
-  const errorMessage = document.getElementById("error-message");
-
-  if (taskText === "") {
-    errorMessage.textContent = "Task cannot be empty.";
-    return;
-  }
-
-  errorMessage.textContent = ""; // Clear previous error messages
-
-  const taskBox = document.createElement("div");
-  taskBox.classList.add("task-box");
-  taskBox.textContent = taskText;
-
-  taskList.appendChild(taskBox);
-
-  // Clear the input field after adding
-  document.getElementById("new-task-text").value = "";
-}
-
-
-// Example initial tasks (optional - you can remove this if you want)
-document.addEventListener("DOMContentLoaded", () => { // Run this code after the DOM is fully loaded.
-  const taskList = document.getElementById("task-list");
-
-  // You can add initial tasks programmatically here:
-  const initialTasks = [
-    "Grocery Shopping",
-    "Pay Bills",
-    "Read a Book"
-  ];
-
-  initialTasks.forEach(taskText => {
-    const taskBox = document.createElement("div");
-    taskBox.classList.add("task-box");
-    taskBox.textContent = taskText;
-    taskList.appendChild(taskBox);
-  });
-});
-
-
-</script>
-
-        <?php require('./templates/copyright.php') ?>
+        </main>
+        <?php require('./templates/footer.php') ?>
     </div>
 </div>
 
 <?php require('./templates/footer.php') ?>
+
+<style>
+    .feedback {
+        margin-bottom: 1rem;
+    }
+    .feedback-actions {
+        display: flex;
+        gap: 1rem;
+    }
+    .btn-icon {
+        background: none;
+        border: none;
+        color: #9e5510;
+        cursor: not-allowed;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .btn-icon i {
+        font-size: 1.25rem;
+    }
+    .feedback-box {
+        border-top: 1px solid #ddd;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+</style>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
