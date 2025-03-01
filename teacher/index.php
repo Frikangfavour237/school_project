@@ -71,7 +71,7 @@
                                 <div class="card-footer custom-footer d-flex align-items-center justify-content-between">
                                     <p style= "color:#9e5510; font-size: 1rem;">
                                             view feedback analysis
-                                    </p>
+                                    </p>        
                             </a>
                             </div>
                         </div>

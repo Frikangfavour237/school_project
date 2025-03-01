@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gender = $_POST['gender'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $isadmin = 0; // 0 for students, 1 for teachers
+    $role = 'student'; // Default role for students
 
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -23,23 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    /* Check if username or email already exists
+    // Check if username or email already exists
     $stmt = $conn->prepare("SELECT * FROM users WHERE  email = ?");
-    $stmt->bind_param("ss", $email);
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        die("email already exists");
+        die("Username or email already exists");
     }
-*/
-    // Insert the new user into the database
-    $stmt = $conn->prepare("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, 'student')");
-    $stmt->bind_param("sss", $username, $hashed_password, $email);
+
+    // Insert the new user into the users table
+    $stmt = $conn->prepare("INSERT INTO users (fullname, username, batch, gender, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $fullname, $username, $batch, $gender, $email, $hashed_password, $role);
 
     if ($stmt->execute()) {
-        echo "Signup successful!";
-        header("Location: ../signup&signin/Signin.php");
+        // Insert the new user into the students table
+        $stmt = $conn->prepare("INSERT INTO students (fullname, batch, gender, email, password) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $fullname, $batch, $gender, $email, $hashed_password);
+
+        if ($stmt->execute()) {
+            echo "Signup successful!";
+            header("Location: ../signup&signin/Signin.php");
+        } else {
+            echo "Error: " . $stmt->error;
+        }
     } else {
         echo "Error: " . $stmt->error;
     }

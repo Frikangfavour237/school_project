@@ -21,9 +21,7 @@
                         <div class="card bg-white shadow">
                             <div class="card-body">
                                 <h5 class="card-title">Mark Attendance</h5>
-                                <form id="markAttendanceForm" action="mark_attendance.php" method="POST">
-                                    <button type="submit" class="btn btn-yellow">Mark Present</button>
-                                </form>
+                                <button class="btn btn-yellow" onclick="markAttendance()">Mark Attendance</button>
                             </div>
                         </div>
                     </div>
@@ -83,6 +81,26 @@
         <?php require('./templates/footer.php') ?>
     </div>
 </div>
+
+<script>
+    function markAttendance() {
+        fetch('mark_attendance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'student_id=' + <?php echo $_SESSION['user_id']; ?>,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'success') {
+                alert('Attendance marked successfully.');
+            } else {
+                alert('Error marking attendance.');
+            }
+        });
+    }
+</script>
 
 <?php require('./templates/footer.php') ?>
 

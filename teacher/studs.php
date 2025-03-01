@@ -1,21 +1,16 @@
 <?php require('./templates/header.php') ?>
-
 <?php require('./templates/navbar.php') ?>
 <style>
     .table-responsive { overflow-x: auto; }
-    .btn-yellow { background-color: #9e5510; color: #fff; border: none; }
+    .btn-yellow1 { background-color: #28a745; color: #fff; border: none; } /* Green button */
+    .btn-yellow2 { background-color: #dc3545; color: #fff; border: none; } /* Red button */
     .box-shadow { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
     .btn-icon { background: none; border: none; color: #9e5510;}
-         .bg-custom {
-        background-color:rgb(235, 239, 245);
-    }
-    
+    .bg-custom { background-color:rgb(235, 239, 245); }
 </style>
 
 <div id="layoutSidenav">
-
     <?php require('./templates/sidebar.php') ?>
-
     <div id="layoutSidenav_content" class="bg-custom">
         <main>
             <div class="container-fluid px-4">
@@ -33,40 +28,75 @@
                         <thead>
                             <tr>
                                 <th>Student Name</th>
-                                <th>Address</th>
-                                <th>Course</th>
-                                <th>Username</th>
+                                <th>Batch</th>
+                                <th>Gender</th>
+                                <th>Email</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Example row -->
-                            <tr>
-                                <td>Jane Doe</td>
-                                <td>456 Elm St</td>
-                                <td>Biology</td>
-                                <td>janedoe</td>
-                                <td>
-                                    <button class="btn-icon" title="Edit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                            <path d="M12 2C10.3431 2 9 3.34315 9 5C9 6.65685 10.3431 8 12 8C13.6569 8 15 6.65685 15 5C15 3.34315 13.6569 2 12 2ZM12 10C9.79086 10 8 11.7909 8 14V16H16V14C16 11.7909 14.2091 10 12 10ZM4 16V14C4 10.6863 6.68629 8 10 8H14C17.3137 8 20 10.6863 20 14V16H22V18H2V16H4Z"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                            <path d="M3 6H5H21V8H19L17.5 20.5C17.5 21.3284 16.8284 22 16 22H8C7.17157 22 6.5 21.3284 6.5 20.5L5 8H3V6ZM8 10V20H16V10H8ZM10 2H14V4H10V2Z"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Add more rows as needed -->
+                            <?php
+                            require('../config/db.php'); // Include your database connection file
+
+                            // Fetch students from the database
+                            $result = $conn->query("SELECT * FROM users WHERE role = 'student'");
+
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['batch']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['gender']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['email']) . '</td>';
+                                echo '<td>';
+                                echo '<button class="btn btn-yellow1" onclick="approveAttendance(' . $row['id'] . ')">Approve</button>';
+                                echo '<button class="btn btn-yellow2" onclick="rejectAttendance(' . $row['id'] . ')">Reject</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+
+                            $conn->close();
+                            ?>
                         </tbody>
                     </table>
                     <button class="btn btn-yellow mt-3" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
                 </div>
+
+                <h2 class="mt-4">Attendance Requests</h2>
+                <div class="table-responsive box-shadow p-3 mb-4 bg-white rounded">
+                    <table class="table table-striped" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            require('../config/db.php'); // Include your database connection file
+
+                            // Fetch attendance requests from the database
+                            $result = $conn->query("SELECT ar.id, u.fullname, ar.status FROM attendance_requests ar JOIN users u ON ar.student_id = u.id WHERE ar.status = 'pending'");
+
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
+                                echo '<td>';
+                                echo '<button class="btn btn-yellow1" onclick="approveAttendance(' . $row['id'] . ')">Approve</button>';
+                                echo '<button class="btn btn-yellow2" onclick="rejectAttendance(' . $row['id'] . ')">Reject</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
-        <?php require('./templates/copyright.php') ?>
+        <?php require('./templates/footer.php') ?>
     </div>
 </div>
 
@@ -87,8 +117,8 @@
                         <input type="text" class="form-control" id="studentName" name="studentName" required>
                     </div>
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
+                        <label for="address">Batch</label>
+                        <input type="text" class="form-control" id="address" name="batch" required>
                     </div>
                     <div class="form-group">
                         <label for="course">Course</label>
@@ -115,13 +145,51 @@
 
         tableRows.forEach(row => {
             const studentName = row.cells[0].textContent.toLowerCase();
-            const address = row.cells[1].textContent.toLowerCase();
-            const course = row.cells[2].textContent.toLowerCase();
-            const username = row.cells[3].textContent.toLowerCase();
+            const batch = row.cells[1].textContent.toLowerCase();
+            const gender = row.cells[2].textContent.toLowerCase();
+            const email = row.cells[3].textContent.toLowerCase();
 
-            const isMatch = studentName.includes(searchTerm) || address.includes(searchTerm) || course.includes(searchTerm) || username.includes(searchTerm);
+            const isMatch = studentName.includes(searchTerm) || batch.includes(searchTerm) || gender.includes(searchTerm) || email.includes(searchTerm);
 
             row.style.display = isMatch ? '' : 'none';
+        });
+    }
+
+    function approveAttendance(requestId) {
+        fetch('approve_attendance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'request_id=' + requestId,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'success') {
+                alert('Attendance approved successfully.');
+                location.reload();
+            } else {
+                alert('Error approving attendance.');
+            }
+        });
+    }
+
+    function rejectAttendance(requestId) {
+        fetch('reject_attendance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'request_id=' + requestId,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === 'success') {
+                alert('Attendance rejected successfully.');
+                location.reload();
+            } else {
+                alert('Error rejecting attendance.');
+            }
         });
     }
 </script>

@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert the new user into the database
-    $stmt = $conn->prepare("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, 'teacher')");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, email, role) VALUES ($username, $password, $email, 'teacher')");
     $stmt->bind_param("sss", $username, $hashed_password, $email);
 
     if ($stmt->execute()) {
