@@ -7,6 +7,7 @@
     .box-shadow { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
     .btn-icon { background: none; border: none; color: #9e5510;}
     .bg-custom { background-color:rgb(235, 239, 245); }
+    .btn-approved { background-color: #6c757d; color: #fff; border: none; } /* Gray button */
 </style>
 
 <div id="layoutSidenav">
@@ -18,6 +19,46 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active" style="color:#9e5510;">Student management</li>
                 </ol>
+
+                <h2 class="mt-4">Attendance Requests</h2>
+                <div class="table-responsive box-shadow p-3 mb-4 bg-white rounded">
+                    <table class="table table-striped" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            require('../config/db.php'); // Include your database connection file
+
+                            // Fetch attendance requests from the database
+                            $result = $conn->query("SELECT ar.request_id, u.fullname, ar.status FROM attendance_requests ar JOIN users u ON ar.student_id = u.id WHERE ar.status = 'pending'");
+
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr id="request-' . $row['request_id'] . '">';
+                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
+                                echo '<td>';
+                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="request_id" value="' . $row['request_id'] . '">';
+                                echo '<button type="submit" class="btn btn-yellow1" data-action="approve">Approve</button>';
+                                echo '</form>';
+                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="request_id" value="' . $row['request_id'] . '">';
+                                echo '<button type="submit" class="btn btn-yellow2" data-action="reject">Reject</button>';
+                                echo '</form>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="mb-4">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search for a student..." onkeyup="filterTable()">
@@ -48,8 +89,14 @@
                                 echo '<td>' . htmlspecialchars($row['gender']) . '</td>';
                                 echo '<td>' . htmlspecialchars($row['email']) . '</td>';
                                 echo '<td>';
-                                echo '<button class="btn btn-yellow1" onclick="approveAttendance(' . $row['id'] . ')">Approve</button>';
-                                echo '<button class="btn btn-yellow2" onclick="rejectAttendance(' . $row['id'] . ')">Reject</button>';
+                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="student_id" value="' . $row['id'] . '">';
+                                echo '<button type="submit" class="btn btn-yellow1" data-action="approve">Approve</button>';
+                                echo '</form>';
+                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="student_id" value="' . $row['id'] . '">';
+                                echo '<button type="submit" class="btn btn-yellow2" data-action="reject">Reject</button>';
+                                echo '</form>';
                                 echo '</td>';
                                 echo '</tr>';
                             }
@@ -59,40 +106,6 @@
                         </tbody>
                     </table>
                     <button class="btn btn-yellow mt-3" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
-                </div>
-
-                <h2 class="mt-4">Attendance Requests</h2>
-                <div class="table-responsive box-shadow p-3 mb-4 bg-white rounded">
-                    <table class="table table-striped" id="attendanceTable">
-                        <thead>
-                            <tr>
-                                <th>Student Name</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            require('../config/db.php'); // Include your database connection file
-
-                            // Fetch attendance requests from the database
-                            $result = $conn->query("SELECT ar.id, u.fullname, ar.status FROM attendance_requests ar JOIN users u ON ar.student_id = u.id WHERE ar.status = 'pending'");
-
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<tr>';
-                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
-                                echo '<td>';
-                                echo '<button class="btn btn-yellow1" onclick="approveAttendance(' . $row['id'] . ')">Approve</button>';
-                                echo '<button class="btn btn-yellow2" onclick="rejectAttendance(' . $row['id'] . ')">Reject</button>';
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-
-                            $conn->close();
-                            ?>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </main>
@@ -155,46 +168,33 @@
         });
     }
 
-    function approveAttendance(requestId) {
-        fetch('approve_attendance.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'request_id=' + requestId,
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data === 'success') {
-                alert('Attendance approved successfully.');
-                location.reload();
-            } else {
-                alert('Error approving attendance.');
-            }
-        });
-    }
+    $(document).ready(function() {
+        $('.attendance-form').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const action = form.find('button[type="submit"]').data('action');
+            const student_id = form.find('input[name="student_id"]').val();
 
-    function rejectAttendance(requestId) {
-        fetch('reject_attendance.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'request_id=' + requestId,
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data === 'success') {
-                alert('Attendance rejected successfully.');
-                location.reload();
-            } else {
-                alert('Error rejecting attendance.');
-            }
+            $.ajax({
+                url: action === 'approve' ? 'approve_attendance.php' : 'reject_attendance.php',
+                type: 'POST',
+                data: { student_id: student_id },
+                success: function(response) {
+                    if (response.trim() === 'success') {
+                        form.closest('tr').remove();
+                    } else {
+                        alert('Error: ' + response);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while processing the request.');
+                }
+            });
         });
-    }
+    });
 </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

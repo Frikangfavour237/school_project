@@ -22,6 +22,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
+            // If the user is a student, add an attendance request
+            if ($user['role'] == 'student') {
+                // Check if the student has already marked attendance for today
+                $stmt = $conn->prepare("SELECT * FROM attendance_requests WHERE student_id = ? AND DATE(created_at) = CURDATE()");
+                if (!$stmt) {
+                    echo "error: " . $conn->error;
+                    exit;
+                }
+                $stmt->bind_param("i", $user['id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows == 0) {
+                    // Insert the attendance request into the attendance_requests table
+                    $stmt = $conn->prepare("INSERT INTO attendance_requests (student_id, status) VALUES (?, 'pending')");
+                    if (!$stmt) {
+                        echo "error: " . $conn->error;
+                        exit;
+                    }
+                    $stmt->bind_param("i", $user['id']);
+
+                    if (!$stmt->execute()) {
+                        echo "error: " . $stmt->error;
+                        exit;
+                    }
+                    $stmt->close();
+                }
+            }
+
             // Redirect to the appropriate dashboard based on the role
             if ($user['role'] == 'student') {
                 header("Location: ../student/index.php");
@@ -35,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         echo "No user found with that username";
-
     }
 
     $stmt->close();
