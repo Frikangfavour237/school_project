@@ -38,10 +38,10 @@
                         <tbody>
                             <!-- Example row -->
                             <tr>
-                                <td>John Doe</td>
-                                <td>123 Main St</td>
+                                <td>Favour</td>
+                                <td>Mendong</td>
                                 <td>Mathematics</td>
-                                <td>johndoe</td>
+                                <td>vyne</td>
                                 <td>
                                     <button class="btn-icon" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">

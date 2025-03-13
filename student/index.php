@@ -16,16 +16,7 @@
                 </ol>
 
                 <!-- Mark Present Section -->
-                <div class="row mb-4">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="card bg-white shadow">
-                            <div class="card-body">
-                                <h5 class="card-title">Mark Attendance</h5>
-                                <button class="btn btn-yellow" onclick="markAttendance()">Mark Attendance</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        
 
                 <div class="row">
                     <div class="col-xl-4 col-md-6">

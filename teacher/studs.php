@@ -21,44 +21,6 @@
                 </ol>
 
                 <h2 class="mt-4">Attendance Requests</h2>
-                <div class="table-responsive box-shadow p-3 mb-4 bg-white rounded">
-                    <table class="table table-striped" id="attendanceTable">
-                        <thead>
-                            <tr>
-                                <th>Student Name</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            require('../config/db.php'); // Include your database connection file
-
-                            // Fetch attendance requests from the database
-                            $result = $conn->query("SELECT ar.request_id, u.fullname, ar.status FROM attendance_requests ar JOIN users u ON ar.student_id = u.id WHERE ar.status = 'pending'");
-
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<tr id="request-' . $row['request_id'] . '">';
-                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
-                                echo '<td>';
-                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="request_id" value="' . $row['request_id'] . '">';
-                                echo '<button type="submit" class="btn btn-yellow1" data-action="approve">Approve</button>';
-                                echo '</form>';
-                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="request_id" value="' . $row['request_id'] . '">';
-                                echo '<button type="submit" class="btn btn-yellow2" data-action="reject">Reject</button>';
-                                echo '</form>';
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-
-                            $conn->close();
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
 
                 <div class="mb-4">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search for a student..." onkeyup="filterTable()">
@@ -79,6 +41,53 @@
                             <?php
                             require('../config/db.php'); // Include your database connection file
 
+                            // Handle form submission for approving or rejecting attendance
+                            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                $student_id = $_POST['student_id'];
+                                $action = $_POST['action'];
+
+                                if ($action == 'approve') {
+                                    // Approve attendance
+                                    $stmt = $conn->prepare("INSERT INTO attendance (student_id, date) VALUES (?, NOW())");
+                                    if (!$stmt) {
+                                        echo "error: " . $conn->error;
+                                        exit;
+                                    }
+                                    $stmt->bind_param("i", $student_id);
+                                    if (!$stmt->execute()) {
+                                        echo "error: " . $stmt->error;
+                                        exit;
+                                    }
+                                    $stmt->close();
+
+                                    // Update the status of the attendance request
+                                    $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'approved' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
+                                    if (!$stmt) {
+                                        echo "error: " . $conn->error;
+                                        exit;
+                                    }
+                                    $stmt->bind_param("i", $student_id);
+                                    if (!$stmt->execute()) {
+                                        echo "error: " . $stmt->error;
+                                        exit;
+                                    }
+                                    $stmt->close();
+                                } elseif ($action == 'reject') {
+                                    // Reject attendance
+                                    $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'rejected' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
+                                    if (!$stmt) {
+                                        echo "error: " . $conn->error;
+                                        exit;
+                                    }
+                                    $stmt->bind_param("i", $student_id);
+                                    if (!$stmt->execute()) {
+                                        echo "error: " . $stmt->error;
+                                        exit;
+                                    }
+                                    $stmt->close();
+                                }
+                            }
+
                             // Fetch students from the database
                             $result = $conn->query("SELECT * FROM users WHERE role = 'student'");
 
@@ -89,13 +98,15 @@
                                 echo '<td>' . htmlspecialchars($row['gender']) . '</td>';
                                 echo '<td>' . htmlspecialchars($row['email']) . '</td>';
                                 echo '<td>';
-                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<form method="POST" style="display:inline;">';
                                 echo '<input type="hidden" name="student_id" value="' . $row['id'] . '">';
-                                echo '<button type="submit" class="btn btn-yellow1" data-action="approve">Approve</button>';
+                                echo '<input type="hidden" name="action" value="approve">';
+                                echo '<button type="submit" class="btn btn-yellow1">Approve</button>';
                                 echo '</form>';
-                                echo '<form class="attendance-form" method="POST" style="display:inline;">';
+                                echo '<form method="POST" style="display:inline;">';
                                 echo '<input type="hidden" name="student_id" value="' . $row['id'] . '">';
-                                echo '<button type="submit" class="btn btn-yellow2" data-action="reject">Reject</button>';
+                                echo '<input type="hidden" name="action" value="reject">';
+                                echo '<button type="submit" class="btn btn-yellow2">Reject</button>';
                                 echo '</form>';
                                 echo '</td>';
                                 echo '</tr>';
@@ -167,31 +178,6 @@
             row.style.display = isMatch ? '' : 'none';
         });
     }
-
-    $(document).ready(function() {
-        $('.attendance-form').on('submit', function(e) {
-            e.preventDefault();
-            const form = $(this);
-            const action = form.find('button[type="submit"]').data('action');
-            const student_id = form.find('input[name="student_id"]').val();
-
-            $.ajax({
-                url: action === 'approve' ? 'approve_attendance.php' : 'reject_attendance.php',
-                type: 'POST',
-                data: { student_id: student_id },
-                success: function(response) {
-                    if (response.trim() === 'success') {
-                        form.closest('tr').remove();
-                    } else {
-                        alert('Error: ' + response);
-                    }
-                },
-                error: function() {
-                    alert('An error occurred while processing the request.');
-                }
-            });
-        });
-    });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

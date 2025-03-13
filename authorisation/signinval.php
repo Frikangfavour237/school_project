@@ -22,8 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
-            // If the user is a student, add an attendance request
+            // If the user is a student, add an attendance request and set stud_id in session
             if ($user['role'] == 'student') {
+                $_SESSION['stud_id'] = $user['id']; // Set the student ID in the session
+
                 // Check if the student has already marked attendance for today
                 $stmt = $conn->prepare("SELECT * FROM attendance_requests WHERE student_id = ? AND DATE(created_at) = CURDATE()");
                 if (!$stmt) {
