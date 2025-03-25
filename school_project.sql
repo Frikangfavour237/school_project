@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 11 mars 2025 à 19:49
+-- Généré le : mar. 25 mars 2025 à 05:52
 -- Version du serveur : 10.4.25-MariaDB
 -- Version de PHP : 8.1.10
 
@@ -55,30 +55,80 @@ INSERT INTO `administrators` (`id`, `user_id`, `created_at`, `updated_at`, `full
 CREATE TABLE `attendance` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
+  `date` date NOT NULL DEFAULT current_timestamp(),
+  `status` text NOT NULL DEFAULT '\'present\''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `attendance`
 --
 
-INSERT INTO `attendance` (`id`, `student_id`, `date`) VALUES
-(1, 14, '2025-03-10 02:23:00'),
-(2, 1, '2025-03-11 11:23:14'),
-(3, 1, '2025-03-11 11:36:08'),
-(4, 1, '2025-03-11 11:39:31'),
-(5, 1, '2025-03-11 11:39:42'),
-(6, 1, '2025-03-11 12:49:13'),
-(7, 1, '2025-03-11 12:51:07'),
-(8, 1, '2025-03-11 12:51:10'),
-(9, 11, '2025-03-11 12:51:43'),
-(10, 14, '2025-03-11 12:52:17'),
-(11, 14, '2025-03-11 12:56:04'),
-(12, 12, '2025-03-11 12:56:07'),
-(13, 15, '2025-03-11 13:07:41'),
-(14, 1, '2025-03-11 13:56:13'),
-(15, 1, '2025-03-11 14:05:44'),
-(16, 15, '2025-03-11 14:23:10');
+INSERT INTO `attendance` (`id`, `student_id`, `date`, `status`) VALUES
+(1, 14, '2025-03-10', 'present'),
+(2, 1, '2025-03-11', 'present'),
+(3, 1, '2025-03-11', 'present'),
+(4, 1, '2025-03-11', 'present'),
+(5, 1, '2025-03-11', 'present'),
+(6, 1, '2025-03-11', 'present'),
+(7, 1, '2025-03-11', 'present'),
+(8, 1, '2025-03-11', 'present'),
+(9, 11, '2025-03-11', 'present'),
+(10, 14, '2025-03-11', 'present'),
+(11, 14, '2025-03-11', 'present'),
+(12, 12, '2025-03-11', 'present'),
+(13, 15, '2025-03-11', 'present'),
+(14, 1, '2025-03-11', 'present'),
+(15, 1, '2025-03-11', 'present'),
+(16, 15, '2025-03-11', 'present'),
+(17, 15, '2025-03-12', 'present'),
+(18, 15, '2025-03-20', 'present'),
+(19, 1, '2025-03-20', 'present'),
+(20, 12, '2025-03-20', 'present'),
+(21, 1, '2025-03-20', 'present'),
+(22, 12, '2025-03-20', 'present'),
+(26, 11, '2025-03-20', 'present'),
+(27, 15, '2025-03-20', 'present'),
+(28, 15, '2025-03-20', 'present'),
+(29, 1, '2025-03-20', 'present'),
+(30, 14, '2025-03-20', 'present'),
+(31, 15, '2025-03-20', 'present'),
+(32, 15, '2025-03-20', 'present'),
+(33, 1, '2025-03-20', 'present'),
+(34, 12, '2025-03-20', 'present'),
+(35, 12, '2025-03-20', 'present'),
+(36, 12, '2025-03-20', 'present'),
+(37, 15, '2025-03-20', 'present'),
+(38, 15, '2025-03-20', 'present'),
+(39, 15, '2025-03-20', 'present'),
+(40, 15, '2025-03-20', 'present'),
+(41, 15, '2025-03-20', 'present'),
+(42, 15, '2025-03-20', 'present'),
+(43, 15, '2025-03-20', 'present'),
+(44, 13, '2025-03-20', 'present'),
+(45, 13, '2025-03-20', 'present'),
+(46, 12, '2025-03-20', 'present'),
+(47, 12, '2025-03-20', 'present'),
+(48, 12, '2025-03-20', 'present'),
+(49, 12, '2025-03-20', 'present'),
+(50, 12, '2025-03-20', 'present'),
+(51, 14, '2025-03-20', 'present'),
+(52, 12, '2025-03-20', 'present'),
+(53, 13, '2025-03-20', 'present'),
+(54, 12, '2025-03-20', 'present'),
+(55, 13, '2025-03-20', 'present'),
+(56, 12, '2025-03-20', 'present'),
+(57, 13, '2025-03-20', 'present'),
+(58, 12, '2025-03-20', 'present'),
+(59, 12, '2025-03-20', 'present'),
+(60, 12, '2025-03-20', 'present'),
+(61, 15, '2025-03-25', 'present'),
+(62, 15, '2025-03-25', '\'present\''),
+(63, 14, '2025-03-25', '\'present\''),
+(64, 11, '2025-03-25', '\'present\''),
+(65, 12, '2025-03-25', '\'present\''),
+(66, 14, '2025-03-25', '\'present\''),
+(67, 14, '2025-03-25', '\'present\''),
+(68, 12, '2025-03-25', '\'present\'');
 
 -- --------------------------------------------------------
 
@@ -102,7 +152,11 @@ INSERT INTO `attendance_requests` (`request_id`, `student_id`, `status`, `reques
 (1, 14, 'approved', '2025-03-10 01:52:08', '2025-03-11 13:04:06'),
 (2, 12, 'pending', '2025-03-10 15:26:07', '2025-03-11 13:04:06'),
 (3, 11, 'pending', '2025-03-10 17:06:27', '2025-03-11 13:04:06'),
-(4, 15, 'approved', '2025-03-11 13:04:22', '2025-03-11 13:04:22');
+(4, 15, 'approved', '2025-03-11 13:04:22', '2025-03-11 13:04:22'),
+(5, 12, 'pending', '2025-03-12 12:36:35', '2025-03-12 12:36:35'),
+(6, 15, 'approved', '2025-03-25 02:36:18', '2025-03-25 02:36:18'),
+(7, 14, 'approved', '2025-03-25 03:12:41', '2025-03-25 03:12:41'),
+(8, 12, 'pending', '2025-03-25 03:45:07', '2025-03-25 03:45:07');
 
 -- --------------------------------------------------------
 
@@ -141,13 +195,9 @@ CREATE TABLE `feedback` (
 --
 
 INSERT INTO `feedback` (`id`, `student_id`, `teacher_id`, `course_id`, `comment`, `likes`, `dislikes`, `created_at`, `updated_at`) VALUES
-(12, NULL, NULL, NULL, 'skjdj', 2, 1, '2025-02-20 02:37:14', '2025-03-11 10:49:18'),
-(13, NULL, NULL, NULL, 'lwmef', 2, 0, '2025-02-20 03:00:27', '2025-03-11 10:47:16'),
-(14, NULL, NULL, NULL, 'mr carlson is a bad man', 3, 0, '2025-02-20 09:30:28', '2025-03-11 10:47:12'),
-(15, NULL, NULL, NULL, 'Mr carlson is a good teacher', 2, 0, '2025-02-27 09:47:09', '2025-03-11 10:47:01'),
-(16, NULL, NULL, NULL, 'isnisndiu', 1, 0, '2025-03-01 14:00:05', '2025-03-11 10:46:49'),
-(17, NULL, NULL, NULL, 'jkgjajxa', 0, 0, '2025-03-11 10:47:28', '2025-03-11 10:47:28'),
-(18, NULL, NULL, NULL, 'George is a boy', 1, 0, '2025-03-11 10:47:44', '2025-03-11 10:47:49');
+(15, NULL, NULL, NULL, 'Mr carlson is a good teacher', 3, 0, '2025-02-27 09:47:09', '2025-03-25 03:53:15'),
+(19, NULL, NULL, NULL, 'I think  when Mr Pada is a good teacher amd he takes time to explain his notes to students', 1, 0, '2025-03-25 03:51:24', '2025-03-25 03:51:28'),
+(20, NULL, NULL, NULL, 'I don\'t understand when Mr W teaches. he never answers questions and insults students who try answering his questions. ', 0, 1, '2025-03-25 03:52:32', '2025-03-25 03:52:36');
 
 -- --------------------------------------------------------
 
@@ -168,17 +218,11 @@ CREATE TABLE `feedback_likes` (
 --
 
 INSERT INTO `feedback_likes` (`id`, `feedback_id`, `student_id`, `action`, `created_at`) VALUES
-(1, 13, 1, 'like', '2025-02-20 03:00:29'),
-(2, 12, 1, 'dislike', '2025-02-20 03:01:19'),
-(3, 14, 1, 'like', '2025-02-20 09:30:39'),
-(4, 14, 11, 'like', '2025-02-27 09:47:28'),
 (5, 15, 11, 'like', '2025-02-27 09:47:39'),
-(6, 16, 4, 'like', '2025-03-11 10:46:49'),
 (7, 15, 4, 'like', '2025-03-11 10:47:01'),
-(8, 14, 4, 'like', '2025-03-11 10:47:12'),
-(9, 13, 4, 'like', '2025-03-11 10:47:16'),
-(10, 18, 4, 'like', '2025-03-11 10:47:49'),
-(11, 12, 4, 'like', '2025-03-11 10:49:18');
+(12, 19, 12, 'like', '2025-03-25 03:51:28'),
+(13, 20, 12, 'dislike', '2025-03-25 03:52:36'),
+(14, 15, 12, 'like', '2025-03-25 03:53:15');
 
 -- --------------------------------------------------------
 
@@ -298,7 +342,33 @@ INSERT INTO `users` (`id`, `fullname`, `username`, `batch`, `gender`, `email`, `
 (12, 'matrivyne', 'not', '14', 'female', 'not1@gmail.com', '$2y$10$XyJUW2l9hro//1/QPum29OoZtCrbnAR22Pv35xgHq.JlWDP4SsB9S', 'student', '2025-03-01 14:32:03', '2025-03-01 14:32:03'),
 (13, 'matrivyne', 'note', '14', 'female', 'not2@gmail.com', '$2y$10$VNMbD8WLOaKyGau2cWuVe.4jFCpugetBsiSFADLn7/g8xFGYX15tq', 'student', '2025-03-01 14:35:34', '2025-03-01 14:35:34'),
 (14, 'frikang favour a', 'vy', '3', 'female', 'vy@gmail.com', '$2y$10$Kbt/waR7c9Y.XJsrLmFNBeIXkTfhFKUvbGubjZ0h/HdoAGRGM2uwC', 'student', '2025-03-10 01:51:57', '2025-03-10 01:51:57'),
-(15, 'anabelle', 'ana', '4', 'male', 'ana@gmail.com', '$2y$10$ynyygqsmmcGHVs1PWESWcu3.8nbcaAaLfyo0QL4jiiyZGD3TNGS2m', 'student', '2025-03-11 12:59:09', '2025-03-11 12:59:09');
+(15, 'anabelle', 'ana', '4', 'male', 'ana@gmail.com', '$2y$10$ynyygqsmmcGHVs1PWESWcu3.8nbcaAaLfyo0QL4jiiyZGD3TNGS2m', 'student', '2025-03-11 12:59:09', '2025-03-11 12:59:09'),
+(16, 'oa', 'kAd', '34', NULL, 'LHlh@gmail.com', '', 'student', '2025-03-25 00:59:05', '2025-03-25 00:59:05'),
+(17, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:43', '2025-03-25 01:22:43'),
+(18, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:44', '2025-03-25 01:22:44'),
+(19, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:46', '2025-03-25 01:22:46'),
+(20, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:47', '2025-03-25 01:22:47'),
+(21, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:47', '2025-03-25 01:22:47'),
+(22, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:48', '2025-03-25 01:22:48'),
+(23, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:48', '2025-03-25 01:22:48'),
+(24, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:48', '2025-03-25 01:22:48'),
+(25, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:49', '2025-03-25 01:22:49'),
+(26, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:49', '2025-03-25 01:22:49'),
+(27, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:49', '2025-03-25 01:22:49'),
+(28, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:53', '2025-03-25 01:22:53'),
+(29, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:54', '2025-03-25 01:22:54'),
+(30, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:54', '2025-03-25 01:22:54'),
+(31, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:54', '2025-03-25 01:22:54'),
+(32, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:22:55', '2025-03-25 01:22:55'),
+(33, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:26:20', '2025-03-25 01:26:20'),
+(34, 'adnJQDK', 'qdf', NULL, NULL, 'IDFI@gmail.com', '', 'teacher', '2025-03-25 01:26:21', '2025-03-25 01:26:21'),
+(35, 'dff', 'DWD', NULL, NULL, 'EvyoSna@gmail.com', '', 'teacher', '2025-03-25 01:26:36', '2025-03-25 01:26:36'),
+(36, 'dff', 'DWD', NULL, NULL, 'EvyoSna@gmail.com', '', 'teacher', '2025-03-25 01:26:37', '2025-03-25 01:26:37'),
+(37, 'dff', 'DWD', NULL, NULL, 'EvyoSna@gmail.com', '', 'teacher', '2025-03-25 01:28:02', '2025-03-25 01:28:02'),
+(38, 'dff', 'DWD', NULL, NULL, 'EvyoSna@gmail.com', '', 'teacher', '2025-03-25 01:28:02', '2025-03-25 01:28:02'),
+(39, 'dff', 'DWD', NULL, NULL, 'EvyoSna@gmail.com', '', 'teacher', '2025-03-25 01:28:03', '2025-03-25 01:28:03'),
+(40, 'ihszka', 'ksa', '43', NULL, 'feig@gmail.com', '', 'student', '2025-03-25 01:29:09', '2025-03-25 01:29:09'),
+(41, 'g', 'ksa', '43', NULL, 'feig@gmail.com', '', 'student', '2025-03-25 01:29:19', '2025-03-25 01:29:19');
 
 --
 -- Index pour les tables déchargées
@@ -398,13 +468,13 @@ ALTER TABLE `administrators`
 -- AUTO_INCREMENT pour la table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT pour la table `attendance_requests`
 --
 ALTER TABLE `attendance_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `courses`
@@ -416,13 +486,13 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT pour la table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `feedback_likes`
 --
 ALTER TABLE `feedback_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `materials`
@@ -452,7 +522,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Contraintes pour les tables déchargées

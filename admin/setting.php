@@ -1,10 +1,12 @@
-<?php require('./templates/header.php') ?>
+<?php
+session_start();
+require('../config/db.php'); // Include your database connection file
 
+?>
+
+<?php require('./templates/header.php') ?>
 <?php require('./templates/navbar.php') ?>
 <style>
-    .form-control {
-        margin-bottom: 1rem;
-    }
     .btn-yellow {
         background-color: #9e5510;
         color: #fff;
@@ -16,9 +18,7 @@
 </style>
 
 <div id="layoutSidenav">
-
     <?php require('./templates/sidebar.php') ?>
-
     <div id="layoutSidenav_content" class="bg-light">
         <main>
             <div class="container-fluid px-4">

@@ -6,16 +6,13 @@
 
     <?php require('./templates/sidebar.php') ?>
 
-    <div id="layoutSidenav_content" class="bg-light">
-        <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">logout</h1>
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">signout</li>
-                </ol>
-             
-               
-   
+    <?php
+session_start();
+session_unset();
+session_destroy();
+header('Location: ../signup&signin/Signin.php');
+exit();
+?>
             </div>
         </main>
         <?php require('./templates/copyright.php') ?>
@@ -23,3 +20,4 @@
 </div>
 
 <?php require('./templates/footer.php') ?>
+

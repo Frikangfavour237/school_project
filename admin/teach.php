@@ -1,3 +1,17 @@
+<?php
+session_start();
+require('../config/db.php'); // Include your database connection file
+
+// Fetch teachers from the database
+$query = "
+    SELECT users.fullname, users.email, users.username, teachers.subject 
+    FROM users 
+    JOIN teachers ON users.id = teachers.id 
+    WHERE users.role = 'teacher'
+";
+$result = $conn->query($query);
+?>
+
 <?php require('./templates/header.php') ?>
 
 <?php require('./templates/navbar.php') ?>
@@ -29,33 +43,36 @@
                         <thead>
                             <tr>
                                 <th>Teacher Name</th>
-                                <th>Address</th>
+                                <th>Email</th>
                                 <th>Course</th>
                                 <th>Username</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Example row -->
-                            <tr>
-                                <td>Favour</td>
-                                <td>Mendong</td>
-                                <td>Mathematics</td>
-                                <td>vyne</td>
-                                <td>
-                                    <button class="btn-icon" title="Edit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                            <path d="M12 2C10.3431 2 9 3.34315 9 5C9 6.65685 10.3431 8 12 8C13.6569 8 15 6.65685 15 5C15 3.34315 13.6569 2 12 2ZM12 10C9.79086 10 8 11.7909 8 14V16H16V14C16 11.7909 14.2091 10 12 10ZM4 16V14C4 10.6863 6.68629 8 10 8H14C17.3137 8 20 10.6863 20 14V16H22V18H2V16H4Z"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                            <path d="M3 6H5H21V8H19L17.5 20.5C17.5 21.3284 16.8284 22 16 22H8C7.17157 22 6.5 21.3284 6.5 20.5L5 8H3V6ZM8 10V20H16V10H8ZM10 2H14V4H10V2Z"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Add more rows as needed -->
+                            <?php
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['email']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['subject']) . '</td>';
+                                echo '<td>' . htmlspecialchars($row['username']) . '</td>';
+                                echo '<td>';
+                                echo '<button class="btn-icon" title="Edit" onclick="editTeacher(this)">';
+                                echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">';
+                                echo '<path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92-2.92L14.06 6.19l1.41 1.41L7.33 15.75H5.92v-1.42zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>';
+                                echo '</svg>';
+                                echo '</button>';
+                                echo '<button class="btn-icon" title="Delete" onclick="deleteTeacher(this)">';
+                                echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">';
+                                echo '<path d="M3 6H5H21V8H19L17.5 20.5C17.5 21.3284 16.8284 22 16 22H8C7.17157 22 6.5 21.3284 6.5 20.5L5 8H3V6ZM8 10V20H16V10H8ZM10 2H14V4H10V2Z"/>';
+                                echo '</svg>';
+                                echo '</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                            $conn->close();
+                            ?>
                         </tbody>
                     </table>
                     <button class="btn btn-yellow mt-3" data-toggle="modal" data-target="#addTeacherModal">Add Teacher</button>
@@ -76,19 +93,19 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="addTeacherForm" action="add_teacher.php" method="POST">
+            <form id="addTeacherForm" action="add_teacher.php" method="POST" onsubmit="return addTeacher(event)">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="teacherName">Teacher Name</label>
                         <input type="text" class="form-control" id="teacherName" name="teacherName" required>
                     </div>
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="course">Course</label>
-                        <input type="text" class="form-control" id="course" name="course" required>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -111,14 +128,81 @@
 
         tableRows.forEach(row => {
             const teacherName = row.cells[0].textContent.toLowerCase();
-            const address = row.cells[1].textContent.toLowerCase();
+            const email = row.cells[1].textContent.toLowerCase();
             const course = row.cells[2].textContent.toLowerCase();
             const username = row.cells[3].textContent.toLowerCase();
 
-            const isMatch = teacherName.includes(searchTerm) || address.includes(searchTerm) || course.includes(searchTerm) || username.includes(searchTerm);
+            const isMatch = teacherName.includes(searchTerm) || email.includes(searchTerm) || course.includes(searchTerm) || username.includes(searchTerm);
 
             row.style.display = isMatch ? '' : 'none';
         });
+    }
+
+    function deleteTeacher(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+
+    function editTeacher(button) {
+        const row = button.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const teacherName = cells[0].textContent;
+        const email = cells[1].textContent;
+        const course = cells[2].textContent;
+        const username = cells[3].textContent;
+
+        // Populate the form with the current values
+        document.getElementById('teacherName').value = teacherName;
+        document.getElementById('email').value = email;
+        document.getElementById('subject').value = subject;
+        document.getElementById('username').value = username;
+
+        // Show the modal
+        $('#addTeacherModal').modal('show');
+
+        // Update the form action to handle the edit
+        document.getElementById('addTeacherForm').action = 'edit_teacher.php';
+    }
+
+    function addTeacher(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch('add_teacher.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const table = document.getElementById('teacherTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td>${data.teacher.fullname}</td>
+                    <td>${data.teacher.email}</td>
+                    <td>${data.teacher.subject}</td>
+                    <td>${data.teacher.username}</td>
+                    <td>
+                        <button class="btn-icon" title="Edit" onclick="editTeacher(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92-2.92L14.06 6.19l1.41 1.41L7.33 15.75H5.92v-1.42zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-icon" title="Delete" onclick="deleteTeacher(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path d="M3 6H5H21V8H19L17.5 20.5C17.5 21.3284 16.8284 22 16 22H8C7.17157 22 6.5 21.3284 6.5 20.5L5 8H3V6ZM8 10V20H16V10H8ZM10 2H14V4H10V2Z"/>
+                            </svg>
+                        </button>
+                    </td>
+                `;
+                $('#addTeacherModal').modal('hide');
+                form.reset();
+            } else {
+                alert('Failed to add teacher');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 </script>
 

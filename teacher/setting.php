@@ -38,15 +38,15 @@
                         <form id="editProfileForm" action="update_profile.php" method="POST">
                             <div class="form-group">
                                 <label for="adminName">Name</label>
-                                <input type="text" class="form-control" id="adminName" name="adminName" value="Current Admin Name" required>
+                                <input type="text" class="form-control" id="adminName" name="adminName" value="Current teacher Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="adminUsername">Username</label>
-                                <input type="text" class="form-control" id="adminUsername" name="adminUsername" value="Current Admin Username" required>
+                                <input type="text" class="form-control" id="adminUsername" name="adminUsername" value="Current teacher Username" required>
                             </div>
                             <div class="form-group">
                                 <label for="adminEmail">Email</label>
-                                <input type="email" class="form-control" id="adminEmail" name="adminEmail" value="admin@example.com" required>
+                                <input type="email" class="form-control" id="adminEmail" name="adminEmail" value="teacher@example.com" required>
                             </div>
                             <button type="submit" class="btn btn-yellow">Save Changes</button>
                         </form>

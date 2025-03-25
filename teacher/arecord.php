@@ -1,17 +1,10 @@
 <?php require('./templates/header.php') ?>
-
 <?php require('./templates/navbar.php') ?>
-<style>
-         .bg-custom {
-        background-color:rgb(235, 239, 245);
-    }
-    </style>
 
 <div id="layoutSidenav">
-
     <?php require('./templates/sidebar.php') ?>
 
-    <div id="layoutSidenav_content" class="bg-custom">
+    <div id="layoutSidenav_content" class="bg-light">
         <main>
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Attendance Analysis</h1>
@@ -24,7 +17,23 @@
                         <div class="card bg-white shadow">
                             <div class="card-body">
                                 <h5 class="card-title">Overall Attendance for Semester</h5>
-                                <p class="card-text" style="font-size: 1.25rem; color: #9e5510;">85%</p>
+                                <p class="card-text" style="font-size: 1.25rem; color: #9e5510;">
+                                    <?php
+                                    require('../config/db.php'); // Include your database connection file
+
+                                    // Fetch overall attendance percentage
+                                    $stmt = $conn->prepare("
+                                        SELECT (SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS overall_attendance
+                                        FROM attendance
+                                    ");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $row = $result->fetch_assoc();
+                                    echo round($row['overall_attendance'], 2) . '%';
+
+                                    $stmt->close();
+                                    ?>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -32,7 +41,27 @@
                         <div class="card bg-white shadow">
                             <div class="card-body">
                                 <h5 class="card-title">Average Daily Attendance</h5>
-                                <p class="card-text" style="font-size: 1.25rem; color: #9e5510;">90%</p>
+                                <p class="card-text" style="font-size: 1.25rem; color: #9e5510;">
+                                    <?php
+                                    // Fetch average daily attendance percentage
+                                    $stmt = $conn->prepare("
+                                        SELECT (SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS daily_attendance
+                                        FROM attendance
+                                        GROUP BY date
+                                    ");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $total_attendance = 0;
+                                    $days = 0;
+                                    while ($row = $result->fetch_assoc()) {
+                                        $total_attendance += $row['daily_attendance'];
+                                        $days++;
+                                    }
+                                    echo round($total_attendance / $days, 2) . '%';
+
+                                    $stmt->close();
+                                    ?>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -70,8 +99,33 @@
                             <div class="card-body">
                                 <h5 class="card-title">Frequent Absentees</h5>
                                 <div id="frequentAbsentees">
-                                    <!-- Placeholder for frequent absentees -->
-                                    <p>Frequent absentees content goes here...</p>
+                                    <?php
+                                    // Fetch students with the smallest number of presents
+                                    $stmt = $conn->prepare("
+                                        SELECT u.fullname, COUNT(a.status) AS presents
+                                        FROM users u
+                                        LEFT JOIN attendance a ON u.id = a.student_id AND a.status = 'present'
+                                        GROUP BY u.id
+                                        ORDER BY presents ASC
+                                        LIMIT 5
+                                    ");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+
+                                    echo '<table class="table table-striped">';
+                                    echo '<thead><tr><th>Full Name</th><th>Presents</th></tr></thead>';
+                                    echo '<tbody>';
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['presents']) . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    echo '</tbody>';
+                                    echo '</table>';
+
+                                    $stmt->close();
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -81,8 +135,34 @@
                             <div class="card-body">
                                 <h5 class="card-title">Top Attendees</h5>
                                 <div id="topAttendees">
-                                    <!-- Placeholder for top attendees -->
-                                    <p>Top attendees content goes here...</p>
+                                    <?php
+                                    // Fetch students with the highest number of presents
+                                    $stmt = $conn->prepare("
+                                        SELECT u.fullname, COUNT(a.status) AS presents
+                                        FROM users u
+                                        LEFT JOIN attendance a ON u.id = a.student_id AND a.status = 'present'
+                                        GROUP BY u.id
+                                        ORDER BY presents DESC
+                                        LIMIT 5
+                                    ");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+
+                                    echo '<table class="table table-striped">';
+                                    echo '<thead><tr><th>Full Name</th><th>Presents</th></tr></thead>';
+                                    echo '<tbody>';
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . htmlspecialchars($row['fullname']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['presents']) . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    echo '</tbody>';
+                                    echo '</table>';
+
+                                    $stmt->close();
+                                    $conn->close();
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -96,12 +176,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    <?php
+    // Fetch data for attendance graph
+    require('../config/db.php'); // Include your database connection file
+    $stmt = $conn->prepare("
+        SELECT date, (SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS daily_attendance
+        FROM attendance
+        GROUP BY date
+        ORDER BY date
+    ");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $dates = [];
+    $attendancePercentages = [];
+    while ($row = $result->fetch_assoc()) {
+        $dates[] = $row['date'];
+        $attendancePercentages[] = round($row['daily_attendance'], 2);
+    }
+    $stmt->close();
+    $conn->close();
+    ?>
+
     // Data for attendance graph
     const attendanceGraphData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+        labels: <?php echo json_encode($dates); ?>,
         datasets: [{
-            label: 'Attendance Percentage',
-            data: [85, 88, 90, 87, 92, 95],
+            label: 'Daily Attendance Percentage',
+            data: <?php echo json_encode($attendancePercentages); ?>,
             backgroundColor: 'rgba(158, 85, 16, 0.2)',
             borderColor: '#9e5510',
             borderWidth: 1
@@ -127,10 +228,10 @@
 
     // Data for attendance trend
     const attendanceTrendData = {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+        labels: <?php echo json_encode($dates); ?>,
         datasets: [{
             label: 'Attendance Trend',
-            data: [85, 87, 90, 88, 92, 94],
+            data: <?php echo json_encode($attendancePercentages); ?>,
             backgroundColor: 'rgba(158, 85, 16, 0.2)',
             borderColor: '#9e5510',
             borderWidth: 1,

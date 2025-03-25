@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         echo "error: already marked";
     } else {
-        // Insert the approved attendance into the final attendance table
-        $stmt = $conn->prepare("INSERT INTO attendance (student_id, date) VALUES (?, NOW())");
+        // Insert the approved attendance into the attendance table
+        $stmt = $conn->prepare("INSERT INTO attendance (student_id, date, status) VALUES (?, NOW(), 'present')");
         if (!$stmt) {
             echo "error: " . $conn->error;
             exit;

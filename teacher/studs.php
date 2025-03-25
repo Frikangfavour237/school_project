@@ -1,3 +1,65 @@
+<?php
+session_start();
+require('../config/db.php'); // Include your database connection file
+
+// Handle form submission for approving or rejecting attendance
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $student_id = $_POST['student_id'];
+    $action = $_POST['action'];
+
+    if ($action == 'approve') {
+        // Approve attendance
+        $stmt = $conn->prepare("INSERT INTO attendance (student_id, date) VALUES (?, NOW())");
+        if (!$stmt) {
+            echo "error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("i", $student_id);
+        if (!$stmt->execute()) {
+            echo "error: " . $stmt->error;
+            exit;
+        }
+        $stmt->close();
+
+        // Update the status of the attendance request
+        $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'approved' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
+        if (!$stmt) {
+            echo "error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("i", $student_id);
+        if (!$stmt->execute()) {
+            echo "error: " . $stmt->error;
+            exit;
+        }
+        $stmt->close();
+
+        // Set success message
+        $_SESSION['success_message'] = "Attendance approved successfully for student with student ID: $student_id";
+    } elseif ($action == 'reject') {
+        // Reject attendance
+        $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'rejected' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
+        if (!$stmt) {
+            echo "error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("i", $student_id);
+        if (!$stmt->execute()) {
+            echo "error: " . $stmt->error;
+            exit;
+        }
+        $stmt->close();
+
+        // Set success message
+        $_SESSION['success_message'] = "Attendance rejected successfully for student with student ID: $student_id";
+    }
+
+    // Redirect to the same page to show the success message
+    header("Location: studs.php");
+    exit();
+}
+?>
+
 <?php require('./templates/header.php') ?>
 <?php require('./templates/navbar.php') ?>
 <style>
@@ -8,6 +70,8 @@
     .btn-icon { background: none; border: none; color: #9e5510;}
     .bg-custom { background-color:rgb(235, 239, 245); }
     .btn-approved { background-color: #6c757d; color: #fff; border: none; } /* Gray button */
+    .modal-header-custom { background-color:#9e5510; color: #fff; } /* Green header */
+    .modal-footer-custom { background-color: #f8f9fa; } /* Light footer */
 </style>
 
 <div id="layoutSidenav">
@@ -39,55 +103,6 @@
                         </thead>
                         <tbody>
                             <?php
-                            require('../config/db.php'); // Include your database connection file
-
-                            // Handle form submission for approving or rejecting attendance
-                            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                $student_id = $_POST['student_id'];
-                                $action = $_POST['action'];
-
-                                if ($action == 'approve') {
-                                    // Approve attendance
-                                    $stmt = $conn->prepare("INSERT INTO attendance (student_id, date) VALUES (?, NOW())");
-                                    if (!$stmt) {
-                                        echo "error: " . $conn->error;
-                                        exit;
-                                    }
-                                    $stmt->bind_param("i", $student_id);
-                                    if (!$stmt->execute()) {
-                                        echo "error: " . $stmt->error;
-                                        exit;
-                                    }
-                                    $stmt->close();
-
-                                    // Update the status of the attendance request
-                                    $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'approved' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
-                                    if (!$stmt) {
-                                        echo "error: " . $conn->error;
-                                        exit;
-                                    }
-                                    $stmt->bind_param("i", $student_id);
-                                    if (!$stmt->execute()) {
-                                        echo "error: " . $stmt->error;
-                                        exit;
-                                    }
-                                    $stmt->close();
-                                } elseif ($action == 'reject') {
-                                    // Reject attendance
-                                    $stmt = $conn->prepare("UPDATE attendance_requests SET status = 'rejected' WHERE student_id = ? AND DATE(request_date) = CURDATE()");
-                                    if (!$stmt) {
-                                        echo "error: " . $conn->error;
-                                        exit;
-                                    }
-                                    $stmt->bind_param("i", $student_id);
-                                    if (!$stmt->execute()) {
-                                        echo "error: " . $stmt->error;
-                                        exit;
-                                    }
-                                    $stmt->close();
-                                }
-                            }
-
                             // Fetch students from the database
                             $result = $conn->query("SELECT * FROM users WHERE role = 'student'");
 
@@ -162,6 +177,26 @@
     </div>
 </div>
 
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="successModalLabel">Action Successful</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer modal-footer-custom">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function filterTable() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
@@ -178,10 +213,21 @@
             row.style.display = isMatch ? '' : 'none';
         });
     }
+
+    // Show success message if set in the session
+    <?php if (isset($_SESSION['success_message'])): ?>
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = "<?php echo $_SESSION['success_message']; ?>";
+            document.getElementById('successMessage').textContent = successMessage;
+            $('#successModal').modal('show');
+            <?php unset($_SESSION['success_message']); ?>
+        });
+    <?php endif; ?>
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
